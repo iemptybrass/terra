@@ -8,7 +8,7 @@ return function ()
     end
     local ok, mod = pcall(require, path .. name)
     assert(ok, ("error"):format(name, mod))
-    loaded[name], _G[name] = mod, mod
+    loaded[name], getfenv(2)[name] = mod, mod
   end
   rawset(_G, "tools", tools)
   return tools

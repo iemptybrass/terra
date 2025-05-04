@@ -31,58 +31,94 @@ return function (input)
 
   local function build(t)
     local first = apply(t,2^1)
-    local second = cache(function(a) return cache(function(b) return first(a, b) end) end)
-    return apply(second, 2 ^ (t.n or 1))
+    local second = cache(function(a)
+      return cache(function(b)
+        return first(a, b)
+      end)
+    end)
+    return apply(second, 2 ^ (t.n or 1) )
   end
 
-  local xor = build({[0] = {[0] = 0,[1] = 1}, [1] = {[0] = 1, [1] = 0}, n = 4})
+  local xor = build(
+    { [0] = {[0] = 0,[1] = 1},
+      [1] = {[0] = 1, [1] = 0},
+      n = 4 })
 
   local function xorbit(a, b, c, ...)
     local z = nil
-    if b then
-      a = a % limit
-      b = b % limit
-      z = xor(a, b)
-      if c then z = xorbit(z, c, ...) end
-      return z
-    elseif a then return a % limit
-    else return 0 end
+    if b
+      then
+        a = a % limit
+        b = b % limit
+        z = xor(a, b)
+        if c
+          then
+            z = xorbit(z, c, ...)
+        end
+        return z
+    end
+    if a
+      then
+        return a % limit
+      else
+        return 0
+    end
   end
 
   local function andbit(a, b, c, ...)
     local z
-    if b then
-      a = a % limit
-      b = b % limit
-      z = ((a + b) - xor(a,b)) / 2
-      if c then z = andbit(z, c, ...) end
-      return z
-    elseif a then return a % limit
-    else return mask end
+    if b
+      then
+        a = a % limit
+        b = b % limit
+        z = ( (a + b) - xor(a,b) ) / 2
+        if c
+          then
+            z = andbit(z, c, ...)
+        end
+        return z
+    end
+    if a
+      then
+        return a % limit
+      else
+        return mask
+    end
   end
 
-  local function notbit(x) return (-1 - x) % limit end
-
-  local function shiftright(a, disp)
-    if disp < 0 then return bit.lshift(a,-disp) end
-    return math.floor(a % 2 ^ 32 / 2 ^ disp)
+  local function notbit(x)
+    return (-1 - x) % limit
   end
 
-  local function rshift(x, disp)
-    if disp > 31 or disp < -31 then return 0 end
-    return shiftright(x % limit, disp)
+  local function shiftright(a, p)
+    if p < 0
+      then
+        return bit.lshift(a,-p)
+    end
+    return math.floor(a % 2 ^ 32 / 2 ^ p)
   end
 
-  local function lshift(a, disp)
-    if disp < 0 then return rshift(a,-disp) end 
-    return (a * 2 ^ disp) % 2 ^ 32
+  local function rshift(x, p)
+    if p > 31 or p < -31
+      then
+        return 0
+    end
+    return shiftright(x % limit, p)
   end
 
-  local function rotatebit(x, disp)
-      x = x % limit
-      disp = disp % 32
-      local low = andbit(x, 2 ^ disp - 1)
-      return rshift(x, disp) + lshift(low, 32 - disp)
+  local function lshift(a, p)
+    if p < 0
+      then
+        return rshift(a,-p)
+    end
+    return (a * 2 ^ p) % 2 ^ 32
+  end
+
+  local function rotatebit(x, p)
+    x = x % limit
+    p = p % 32
+    local low = andbit(x, 2 ^ p - 1)
+    return rshift(x, p) + lshift(low, 32 - p)
   end
 
   local k = {
@@ -105,7 +141,9 @@ return function (input)
   }
 
   local function tohex(s)
-    return (string.gsub(s, ".", function(c) return string.format("%02x", string.byte(c)) end))
+    return (string.gsub(s, ".", function(c) 
+      return string.format("%02x", string.byte(c)) 
+    end))
   end
 
   local function tochunk(l, n)
@@ -146,7 +184,11 @@ return function (input)
 
   local function processblock(input, i, H)
     local w = {}
-    for j = 1, 16 do w[j] = fromchunk(input, i + (j - 1)*4) end
+
+    for j = 1, 16 do 
+      w[j] = fromchunk(input, i + (j - 1)*4) 
+    end
+
     for j = 17, 64 do
       local v = w[j - 15]
       local s0 = xorbit(rotatebit(v, 7), rotatebit(v, 18), rshift(v, 3))
@@ -178,9 +220,18 @@ return function (input)
   local function sha256(input)
     input = padblock(input, #input)
     local H = initstate({})
-    for i = 1, #input, 64 do processblock(input, i, H) end
-    return tohex(tochunk(H[1], 4) .. tochunk(H[2], 4) .. tochunk(H[3], 4) .. tochunk(H[4], 4) ..
-      tochunk(H[5], 4) .. tochunk(H[6], 4) .. tochunk(H[7], 4) .. tochunk(H[8], 4))
+    for i = 1, #input, 64 do
+      processblock(input, i, H)
+    end
+    return tohex(
+      tochunk(H[1], 4) ..
+      tochunk(H[2], 4) ..
+      tochunk(H[3], 4) ..
+      tochunk(H[4], 4) ..
+      tochunk(H[5], 4) ..
+      tochunk(H[6], 4) ..
+      tochunk(H[7], 4) ..
+      tochunk(H[8], 4) )
   end
 
   return sha256(input)

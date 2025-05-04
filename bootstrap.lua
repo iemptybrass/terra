@@ -3,5 +3,5 @@ local library, modules = ("lib"),
   "ffi",
   "tools" }
 for _, name in ipairs(modules) do
-  require(library.."."..name)()
+  require(library ..".".. name)()
 end
