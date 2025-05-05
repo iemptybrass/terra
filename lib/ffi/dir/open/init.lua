@@ -1,5 +1,5 @@
-ffi.cdef([[ int closedir(DIR *dirp); ]])
+ffi.cdef([[ DIR *opendir(const char *name); ]])
 
 return function(input)
-  return ffi.C.closedir(assert(input)) == 0
+  return ffi.C.opendir(input)
 end

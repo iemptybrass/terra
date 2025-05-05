@@ -1,7 +1,8 @@
-local library, modules = ("lib"),
+local library, modules =
+(("lib").."."),
 { "core",
   "ffi",
   "tools" }
 for _, name in ipairs(modules) do
-  require(library ..".".. name)()
+  require(library .. name)
 end
