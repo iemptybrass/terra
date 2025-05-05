@@ -1,20 +1,20 @@
 return function(input, arg)
-  local buffer, content = arg.open(input), {}
-  if arg == dir
-    then
-      while true do
-        local entry = arg.read(buffer)
-        if entry == nil then break end
-        local read = ffi.string(entry.d_name)
-        table.insert(content, read)
-      end
-      arg.rewind(buffer)
+  local buffer = arg.open(input)
+  local content = { d_name = {}, d_type = {} }
+
+  while true do
+    local dname, dtype = buffer:read()
+    if not dname then break end
+    for i, value in ipairs({ dname, dtype or "" }) do
+      table.insert(content[i == 1 and "d_name" or "d_type"], value)
+    end
   end
-  if arg == io
-    then
-      local read = buffer:read("*all")
-      table.insert(content, read)
+
+  buffer:close()
+
+  local result = {}
+  for i = 1, #content.d_name do
+    table.insert(result, content.d_name[i] .. " " .. content.d_type[i] .. ",")
   end
-  arg.close(buffer)
-  return table.concat(content, " ")
+  return table.concat(result, " ")
 end
