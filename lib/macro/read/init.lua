@@ -5,8 +5,10 @@ return function(input, arg)
   while true do
     local dname, dtype = buffer:read()
     if not dname then break end
-    for i, value in ipairs({ dname, dtype or "" }) do
-      table.insert(content[i == 1 and "d_name" or "d_type"], value)
+    if dname:sub(1, 1) ~= "." then
+      for i, value in ipairs({ dname, dtype or "" }) do
+        table.insert(content[i == 1 and "d_name" or "d_type"], value)
+      end
     end
   end
 
