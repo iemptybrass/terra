@@ -141,8 +141,8 @@ return (function (input)
   }
 
   local function tohex(s)
-    return (string.gsub(s, ".", function(c) 
-      return string.format("%02x", string.byte(c)) 
+    return (string.gsub(s, ".", function(c)
+      return string.format("%02x", string.byte(c))
     end))
   end
 
@@ -186,24 +186,43 @@ return (function (input)
     local w = {}
 
     for j = 1, 16 do 
-      w[j] = fromchunk(input, i + (j - 1)*4) 
+      w[j] = fromchunk(input, i + (j - 1)*4)
     end
 
     for j = 17, 64 do
       local v = w[j - 15]
-      local s0 = xorbit(rotatebit(v, 7), rotatebit(v, 18), rshift(v, 3))
+      local s = xorbit(
+                  rotatebit(v, 7),
+                  rotatebit(v, 18),
+                  rshift(v, 3) )
       v = w[j - 2]
-      w[j] = w[j - 16] + s0 + w[j - 7] + xorbit(rotatebit(v, 17), rotatebit(v, 19), rshift(v, 10))
+      w[j] = w[j-16] + s + w[j-7] + xorbit(
+                                      rotatebit(v, 17),
+                                      rotatebit(v, 19),
+                                      rshift(v, 10) )
     end
 
-    local a, b, c, d, e, f, g, h = H[1], H[2], H[3], H[4], H[5], H[6], H[7], H[8]
+
+    local a, b, c, d = H[1], H[2], H[3], H[4]
+    local e, f, g, h = H[5], H[6], H[7], H[8]
     for i = 1, 64 do
-      local s0 = xorbit(rotatebit(a, 2), rotatebit(a, 13), rotatebit(a, 22))
-      local maj = xorbit(andbit(a, b), andbit(a, c), andbit(b, c))
-      local t2 = s0 + maj
-      local s1 = xorbit(rotatebit(e, 6), rotatebit(e, 11), rotatebit(e, 25))
-      local ch = xorbit (andbit(e, f), andbit(notbit(e), g))
-      local t1 = h + s1 + ch + k[i] + w[i]
+      local s = xorbit(
+                  rotatebit(a, 2),
+                  rotatebit(a, 13),
+                  rotatebit(a, 22) )
+      local m = xorbit(
+                  andbit(a, b),
+                  andbit(a, c),
+                  andbit(b, c) )
+      local t2 = s + m
+      local o = xorbit(
+                  rotatebit(e, 6),
+                  rotatebit(e, 11),
+                  rotatebit(e, 25) )
+      local r = xorbit (
+                  andbit(e, f),
+                  andbit(notbit(e), g) )
+      local t1 = h + o + r + k[i] + w[i]
       h, g, f, e, d, c, b, a = g, f, e, d + t1, c, b, a, t1 + t2
     end
 
