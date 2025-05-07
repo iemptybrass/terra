@@ -3,6 +3,7 @@ return function(input)
   while #queue > 0 do
     local path, depth = unpack(table.remove(queue, 1))
     for block in read(path, dir):gmatch('{.-}') do
+      for key in pairs(result) do result[key] = nil end
       for _, key in ipairs({ "name", "type" }) do
         result[key] = block:match('"'..key..'":"(.-)"')
       end

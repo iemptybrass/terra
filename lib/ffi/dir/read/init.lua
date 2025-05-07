@@ -11,10 +11,7 @@ return function(handle)
   local entry = ffi.C.readdir(handle._dir)
   if entry == nil
     then
-      ffi.C.rewinddir(handle._dir)
-      return nil
+      return ffi.C.rewinddir(handle._dir), nil
   end
-  local dname = ffi.string(entry.d_name)
-  local dtype = tostring(entry.d_type)
-  return dname, dtype
+  return ffi.string(entry.d_name), tostring(entry.d_type)
 end
