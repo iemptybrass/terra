@@ -1,7 +1,6 @@
 return (function (input)
   local limit = 2^32
   local mask = limit-1
-
   local function cache(f)
     local mt = {}
     local t = setmetatable({}, mt)
@@ -12,7 +11,6 @@ return (function (input)
     end
     return t
   end
-
   local function apply(t, m)
     local function bitwise(a, b)
       local res,p = 0,1
@@ -28,7 +26,6 @@ return (function (input)
     end
     return bitwise
   end
-
   local function build(t)
     local first = apply(t,2^1)
     local second = cache(function(a)
@@ -38,12 +35,10 @@ return (function (input)
     end)
     return apply(second, 2 ^ (t.n or 1) )
   end
-
   local xor = build(
     { [0] = {[0] = 0,[1] = 1},
       [1] = {[0] = 1, [1] = 0},
       n = 4 })
-
   local function xorbit(a, b, c, ...)
     local z = nil
     if b
@@ -64,7 +59,6 @@ return (function (input)
         return 0
     end
   end
-
   local function andbit(a, b, c, ...)
     local z
     if b
@@ -85,11 +79,9 @@ return (function (input)
         return mask
     end
   end
-
   local function notbit(x)
     return (-1 - x) % limit
   end
-
   local function shiftright(a, p)
     if p < 0
       then
@@ -97,7 +89,6 @@ return (function (input)
     end
     return math.floor(a % 2 ^ 32 / 2 ^ p)
   end
-
   local function rshift(x, p)
     if p > 31 or p < -31
       then
@@ -105,7 +96,6 @@ return (function (input)
     end
     return shiftright(x % limit, p)
   end
-
   local function lshift(a, p)
     if p < 0
       then
@@ -113,14 +103,12 @@ return (function (input)
     end
     return (a * 2 ^ p) % 2 ^ 32
   end
-
   local function rotatebit(x, p)
     x = x % limit
     p = p % 32
     local low = andbit(x, 2 ^ p - 1)
     return rshift(x, p) + lshift(low, 32 - p)
   end
-
   local k = {
     0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5,
     0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
@@ -137,15 +125,12 @@ return (function (input)
     0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5,
     0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208,
-    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
-  }
-
+    0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2, }
   local function tohex(s)
     return (string.gsub(s, ".", function(c)
       return string.format("%02x", string.byte(c))
     end))
   end
-
   local function tochunk(l, n)
     local s = ""
     for i = 1, n do
@@ -155,13 +140,11 @@ return (function (input)
     end
     return s
   end
-
   local function fromchunk(s, i)
     local n = 0
     for i = i, i + 3 do n = n*256 + string.byte(s, i) end
     return n
   end
-
   local function padblock(input, len)
     local extra = 64 - ((len + 9) % 64)
     len = tochunk(8 * len, 8)
@@ -169,7 +152,6 @@ return (function (input)
     assert(#input % 64 == 0)
     return input
   end
-
   local function initstate(H)
     H[1] = 0x6a09e667
     H[2] = 0xbb67ae85
@@ -181,14 +163,11 @@ return (function (input)
     H[8] = 0x5be0cd19
     return H
   end
-
   local function processblock(input, i, H)
     local w = {}
-
     for j = 1, 16 do 
       w[j] = fromchunk(input, i + (j - 1)*4)
     end
-
     for j = 17, 64 do
       local v = w[j - 15]
       local s = xorbit(
@@ -201,8 +180,6 @@ return (function (input)
                                       rotatebit(v, 19),
                                       rshift(v, 10) )
     end
-
-
     local a, b, c, d = H[1], H[2], H[3], H[4]
     local e, f, g, h = H[5], H[6], H[7], H[8]
     for i = 1, 64 do
@@ -225,7 +202,6 @@ return (function (input)
       local t1 = h + o + r + k[i] + w[i]
       h, g, f, e, d, c, b, a = g, f, e, d + t1, c, b, a, t1 + t2
     end
-
     H[1] = andbit(H[1] + a)
     H[2] = andbit(H[2] + b)
     H[3] = andbit(H[3] + c)
@@ -235,7 +211,6 @@ return (function (input)
     H[7] = andbit(H[7] + g)
     H[8] = andbit(H[8] + h)
   end
-
   local function sha256(input)
     input = padblock(input, #input)
     local H = initstate({})
@@ -252,6 +227,5 @@ return (function (input)
       tochunk(H[7], 4) ..
       tochunk(H[8], 4) )
   end
-
   return sha256(input)
 end)
