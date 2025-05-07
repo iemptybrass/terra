@@ -1,4 +1,4 @@
-return function(input)
+return (function(input)
   local queue, result = { { input, 1 } }, {}
   while #queue > 0 do
     local path, depth = unpack(table.remove(queue, 1))
@@ -18,4 +18,4 @@ return function(input)
       end
     end
   end
-end
+end)

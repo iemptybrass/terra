@@ -1,6 +1,6 @@
 local path, modules =
 ((...).."."),
-{ "read", 
+{ "read",
   "tree" }
 return (function ()
   for _, name in ipairs(modules) do

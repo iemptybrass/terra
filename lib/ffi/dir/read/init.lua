@@ -7,11 +7,11 @@ ffi.cdef([[ struct dirent {
 ffi.cdef([[ struct dirent *readdir(DIR *dirp); ]])
 ffi.cdef([[ void rewinddir(DIR *dirp); ]])
 
-return function(handle)
+return (function(handle)
   local entry = ffi.C.readdir(handle._dir)
   if entry == nil
     then
       return ffi.C.rewinddir(handle._dir), nil
   end
   return ffi.string(entry.d_name), tostring(entry.d_type)
-end
+end)

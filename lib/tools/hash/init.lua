@@ -1,4 +1,4 @@
-return function (input)
+return (function (input)
   local limit = 2^32
   local mask = limit-1
 
@@ -235,4 +235,4 @@ return function (input)
   end
 
   return sha256(input)
-end
+end)

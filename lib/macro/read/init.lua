@@ -1,4 +1,4 @@
-return function(input, arg)
+return (function(input, arg)
   local buffer = arg.open(input)
   local result, map = {}, { ["4"] = "directory", ["8"] = "file" }
   while true do
@@ -19,4 +19,4 @@ return function(input, arg)
   end
   buffer:close()
   return table.concat(result, " ")
-end
+end)

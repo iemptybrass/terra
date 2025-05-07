@@ -1,7 +1,7 @@
-local loaded, path = {}, ((...)..".")
-return function ()
+local path, loaded =
+((...).."."), {}
+return (function ()
   local function tools(name)
-    assert(type(name) == "string", "error")
     if loaded[name]
       then
         return rawset(getfenv(2), name, loaded[name])
@@ -12,4 +12,4 @@ return function ()
   end
   rawset(_G, "tools", tools)
   return tools
-end
+end)( )
