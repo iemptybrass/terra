@@ -13,8 +13,8 @@ return function(input, arg)
     end
     if dname:sub(1, 1) ~= "."
       then
-        local dtype = map[dtype] or dtype
-        result[#result+1] = string.format('{"name":"%s", "type":"%s"}', dname, dtype)
+        local dtype = map[dtype]
+        result[#result + 1] = ('{"name":"%s","type":"%s"}'):format(dname, dtype)
     end
   end
   buffer:close()
