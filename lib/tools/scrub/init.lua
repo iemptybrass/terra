@@ -7,9 +7,9 @@ return (function (scrub)
   for _, name in ipairs(all) do
     scrub[name] = require(path .. name)
   end
-  local rawopen = scrub.target
+  local raw = scrub.target
   scrub.target = function(input)
-    local handle = rawopen(input)
+    local handle = raw(input)
     for _, method in ipairs(modules) do
       handle[method] = function(self, ...)
         return scrub[method](self, ...)
