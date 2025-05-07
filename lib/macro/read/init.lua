@@ -9,7 +9,8 @@ return (function(input, arg)
     end
     if dtype == nil
       then
-        return buffer:close(), dname
+        buffer:close()
+        return (dname)
     end
     if dname:sub(1, 1) ~= "." 
       then
