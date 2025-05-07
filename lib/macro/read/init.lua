@@ -11,10 +11,14 @@ return (function(input, arg)
       then
         return buffer:close(), dname
     end
-    if dname:sub(1, 1) ~= "."
+    if dname:sub(1, 1) ~= "." 
       then
         local dtype = map[dtype]
-        result[#result + 1] = ('{"name":"%s","type":"%s"}'):format(dname, dtype)
+        local parts = {}
+        for _, item in ipairs({ { "name", dname }, { "type", dtype } }) do
+          parts[#parts + 1] = ('"%s":"%s"'):format(item[1], item[2])
+        end
+        result[#result + 1] = "{" .. table.concat(parts, ", ") .. "}"
     end
   end
   buffer:close()
