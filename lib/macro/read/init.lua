@@ -3,11 +3,13 @@ return function(input, arg)
   local result, map = {}, { ["4"] = "directory", ["8"] = "file" }
   while true do
     local dname, dtype = buffer:read("*a")
-    if not dname then break end
+    if not dname
+      then
+        break
+    end
     if dtype == nil
       then
-        buffer:close()
-        return dname
+        return buffer:close(), dname
     end
     if dname:sub(1, 1) ~= "."
       then
