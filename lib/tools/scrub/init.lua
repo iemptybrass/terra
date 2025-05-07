@@ -1,6 +1,7 @@
 local path, modules =
 ((...).."."),
-{ "literal" }
+{ "literal",
+  "whitespace" }
 return (function (scrub)
   local all = { "target", unpack(modules) }
   for _, name in ipairs(all) do
