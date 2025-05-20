@@ -1,5 +1,5 @@
 return ( function ( input, arg )
-  local result, buffer = {}, arg.open ( input, "rb" )
+  local buffer, result =  arg.open ( input, "rb" ), {}
   local map = { ["4"] = "directory", ["8"] = "file" }
   while true do
     local dname, dtype = buffer:read ( "*a" )
