@@ -5,5 +5,5 @@ local modules =
   "macro",
   "tools" }
 for i = 2, #modules do
-  require( modules[1] .. modules[i] )
+  require ( modules[1] .. modules[i] )
 end
