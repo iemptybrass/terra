@@ -1,3 +1,3 @@
-return (function(ffi)
+return ( function ( ffi )
   _G.ffi = ffi; return ffi
-end)(require("ffi"))
+end ) ( require ( "ffi" ) )
