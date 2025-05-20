@@ -1,5 +1,5 @@
-ffi.cdef([[ DIR *opendir(const char *name); ]])
+ffi.cdef ( [[ DIR *opendir ( const char *name ); ]] )
 
-return (function(input)
-  return { _dir = ffi.C.opendir(assert(input)) }
-end)
+return ( function ( input )
+  return { _dir = ffi.C.opendir ( assert ( input ) ) }
+end )

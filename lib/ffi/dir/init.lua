@@ -1,22 +1,23 @@
-ffi.cdef([[ typedef struct __dirstream DIR; ]])
+ffi.cdef ( [[ typedef struct __dirstream DIR; ]] )
+
 local path, modules =
-((...).."."),
-{ "close",
+( (...) .. "." ),
+{ "open",
+  "close",
   "read" }
-return (function (dir)
-  local all = { "open", unpack(modules) }
-  for _, name in ipairs(all) do
-    dir[name] = require(path .. name)
+return ( function ( directory )
+  for i = 1, #modules do
+    directory[ modules[i] ] = require ( path .. modules[i] )
   end
-  local rawopen = dir.open
-  dir.open = function(input)
-    local handle = rawopen(input)
-    for _, method in ipairs(modules) do
-      handle[method] = function(self, ...)
-        return dir[method](self, ...)
+  local raw = directory[ modules[1] ]
+  directory[ modules[1] ] = function ( input )
+    local handle = raw ( input )
+    for i = 2, #modules do
+      handle[ modules[i] ] = function ( self, ... )
+        return directory[ modules[i] ] ( self, ... )
       end
     end
     return handle
   end
-  return dir
-end)({})
+  return directory
+end ) ( {} )
