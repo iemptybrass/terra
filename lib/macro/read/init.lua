@@ -12,9 +12,9 @@ return ( function ( input, arg )
       then
         local parts, dtype = {}, map[dtype]
         for _, item in ipairs ( { { "name", dname }, { "type", dtype } } ) do
-          parts[#parts + 1] = ( '"%s":"%s"' ):format ( item[1], item[2] )
+          parts[ #parts + 1 ] = ( '"%s":"%s"' ):format ( item[1], item[2] )
         end
-        result[#result + 1] = "{" .. table.concat ( parts, ", " ) .. "}"
+        result[ #result + 1 ] = "{" .. table.concat ( parts, ", " ) .. "}"
     end
   end
 end )
