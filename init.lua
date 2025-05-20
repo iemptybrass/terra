@@ -1,5 +1,5 @@
 package.path = "./?/init.lua;./?.lua;" .. package.path
 
-require( "bootstrap" )
+require ( "bootstrap" )
 
-import( "src" )
+import ( "src" )
