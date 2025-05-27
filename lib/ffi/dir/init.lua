@@ -10,17 +10,14 @@ return ( function ( directory )
     directory[modules[i]] = require ( path .. modules[i] )
   end
   local raw = directory[modules[1]]
-  local handle = {
-    open = ( function ( input )
-      local handle = raw ( input )
-      for i = 2, #modules do
-        local name = modules[i]
-        handle[name] = function ( self, ... )
-          return directory[name] ( self, ... )
-        end
+  directory[modules[1]] = ( function ( input )
+    local handle = raw ( input )
+    for i = 2, #modules do
+      handle[modules[i]] = function ( self, ... )
+        return directory[modules[i]] ( self, ... )
       end
-      return handle
-    end ), }
-  directory[modules[1]] = handle.open
+    end
+    return handle
+  end )
   return directory
 end ) ( { } )
