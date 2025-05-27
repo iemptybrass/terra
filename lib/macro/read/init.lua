@@ -1,12 +1,12 @@
 return ( function ( input, arg )
   local buffer = arg.open( input, "rb" )
   local type, result = {
-    ["4"] = function ( ... )
+    ["4"] = ( function ( ... )
       return ( '{"name":"%s","type":"directory"}' ):format ( ... )
-    end,
-    ["8"] = function ( ... )
+    end ),
+    ["8"] = ( function ( ... )
       return ( '{"name":"%s","type":"file"}' ):format ( ... )
-    end, }, { }
+    end ), }, { }
   while true do
     local dname, dtype = buffer:read ( "*a" )
     if not ( dname and dtype )

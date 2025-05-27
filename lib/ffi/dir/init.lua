@@ -4,19 +4,23 @@ local path, modules =
   ( (...) .. "." ),
   { "open",
     "close",
-    "read" }
+    "read", }
 return ( function ( directory )
   for i = 1, #modules do
-    directory[ modules[i] ] = require ( path .. modules[i] )
+    directory[modules[i]] = require ( path .. modules[i] )
   end
-  local raw = directory[ modules[1] ]
-  directory[ modules[1] ] = function ( input )
-    local handle = raw ( input )
-    for i = 2, #modules do
-      handle[ modules[i] ] = function ( self, ... )
-        return directory[ modules[i] ] ( self, ... ) end
-    end
-    return handle
-  end
+  local raw = directory[modules[1]]
+  local handle = {
+    open = ( function ( input )
+      local handle = raw ( input )
+      for i = 2, #modules do
+        local name = modules[i]
+        handle[name] = function ( self, ... )
+          return directory[name] ( self, ... )
+        end
+      end
+      return handle
+    end ), }
+  directory[modules[1]] = handle.open
   return directory
-end ) ( {} )
+end ) ( { } )
