@@ -3,7 +3,7 @@ local modules =
     "core",
     "ffi",
     "macro",
-    "tools" }
+    "tools", }
 for i = 2, #modules do
   require ( modules[1] .. modules[i] )
 end
