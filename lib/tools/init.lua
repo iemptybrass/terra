@@ -1,7 +1,6 @@
 local path, modules =
   ( ( ... ) .. "." ),
-  { "buffer",
-    "hash",
+  { "hash",
     "tree", }
 return ( function ()
   for _, name in ipairs ( modules ) do
