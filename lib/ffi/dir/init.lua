@@ -1,7 +1,7 @@
 ffi.cdef ( [[ typedef struct __dirstream DIR; ]] )
 
 local path, modules =
-  ( (...) .. "." ),
+  ( ( ... ) .. "." ),
   { "open",
     "close",
     "read", }
