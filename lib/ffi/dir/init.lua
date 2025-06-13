@@ -5,9 +5,17 @@ local path, modules =
   { "open",
     "close",
     "read", }
+
+local fail =
+  { "Failed to load module ", }
+
 return ( function ( directory )
   for i = 1, #modules do
-    directory[modules[i]] = require ( path .. modules[i] )
+    local ok, mod = pcall ( require, path .. modules[i] )
+    if not ok then
+      error ( fail[1] .. path .. modules[i], 2 )
+    end
+    directory[modules[i]] = mod
   end
   local raw = directory[modules[1]]
   directory[modules[1]] = ( function ( input )

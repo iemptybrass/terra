@@ -1,4 +1,8 @@
+local fail =
+  { "input is required", }
+
 return function ( input )
+  assert ( input, fail[1] )
   local hash = 0xcbf29ce484222325ULL
   for i = 1, #input do
     hash = bit.bxor ( hash, input:byte ( i ) )
