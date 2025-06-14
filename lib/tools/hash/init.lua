@@ -1,12 +1,14 @@
 local fail =
-  { "input is required", }
+  { "input is required",
+    "input must be a string" }
 
 return function ( input )
   assert ( input, fail[1] )
+  assert ( type ( input ) == "string", fail[2] )
   local hash = 0xcbf29ce484222325ULL
   for i = 1, #input do
     hash = bit.bxor ( hash, input:byte ( i ) )
     hash = hash * 0x100000001b3ULL
   end
-  return string.format ( "%016x", tonumber ( hash ) )
+  return ("%x"):format ( hash )
 end

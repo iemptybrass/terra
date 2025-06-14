@@ -2,7 +2,7 @@ local fail =
   { "path is required", }
 
 return ( function ( input )
-  assert ( input, fail[1] )
+  assert ( type ( input ) == "string", fail[1] )
   local queue, result, target = { { input, 1 } }, { }, { }
   local type = {
     directory = ( function ( full, depth, queue )

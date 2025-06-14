@@ -18,7 +18,7 @@ return ( function ( input, arg )
     if not ( dname and dtype )
       then
         buffer:close ( )
-        return dname or table.concat ( result, " " )
+        return dname or table.concat ( result, "\n" )
     end
     if dname:sub ( 1, 1 ) ~= "."
       then
