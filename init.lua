@@ -11,8 +11,9 @@ return ( function ( )
   for _, name
     in ipairs ( modules ) do
       local ok, mod = pcall ( require, name )
-      if not ok then
-        error ( fail[1] .. name .. ": " .. tostring ( mod ), 2 )
+      if not ok
+        then
+          error ( fail[1] .. name .. ": " .. tostring ( mod ), 2 )
       end
       require ( name )
   end

@@ -6,8 +6,9 @@ return ( function ( ... )
   for i, name
     in ipairs ( required ) do
       local ok, mod = pcall ( require, name )
-      if not ok then
-        error ( fail[1] .. name .. ": " .. tostring ( mod ), 2 )
+      if not ok
+        then
+          error ( fail[1] .. name .. ": " .. tostring ( mod ), 2 )
       end
       _G[name] = mod
       required[i] = mod

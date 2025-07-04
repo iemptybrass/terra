@@ -1,10 +1,10 @@
-  local type = {
-    ["4"] = ( function ( ... )
-      return ( '{"name":"%s","type":"directory"}' ):format ( ... )
-    end ),
-    ["8"] = ( function ( ... )
-      return ( '{"name":"%s","type":"file"}' ):format ( ... )
-    end ), }
+local type = {
+  ["4"] = ( function ( ... )
+    return ( '{"name":"%s","type":"directory"}' ):format ( ... )
+  end ),
+  ["8"] = ( function ( ... )
+    return ( '{"name":"%s","type":"file"}' ):format ( ... )
+  end ), }
 
 local fail =
   { "both arguments are required", }

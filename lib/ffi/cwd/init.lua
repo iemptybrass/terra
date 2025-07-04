@@ -8,8 +8,9 @@ return ( function ( )
   local ok, cwd = pcall ( function ( )
     return ffi.C.getcwd ( buf, 4096 )
   end )
-  if not ok then
-    error ( fail[1], 2 )
+  if not ok
+    then
+      error ( fail[1], 2 )
   end
   return ffi.string ( cwd )
 end ) ( )
