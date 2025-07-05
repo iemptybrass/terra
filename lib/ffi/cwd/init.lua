@@ -1,12 +1,12 @@
-ffi.cdef ( [[ char *getcwd ( char *buf, size_t size ); ]] )
+ffi.cdef ( [[ char *getcwd ( char *buffer, size_t size ); ]] )
 
 local fail =
   { "getcwd failed", }
 
 return ( function ( )
-  local buf = ffi.new ( "char[?]", 4096 )
+  local buffer = ffi.new ( "char[?]", 4096 )
   local ok, cwd = pcall ( function ( )
-    return ffi.C.getcwd ( buf, 4096 )
+    return ffi.C.getcwd ( buffer, 4096 )
   end )
   if not ok
     then

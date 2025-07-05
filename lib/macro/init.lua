@@ -9,7 +9,7 @@ return ( function ( )
   for _, name
     in ipairs ( modules ) do
       local ok, mod = pcall ( require, path .. name )
-      if not ok 
+      if not ok
         then
           error ( fail[1] .. path .. name .. ": " .. tostring ( mod ), 2 )
       end

@@ -1,4 +1,4 @@
-ffi.cdef ( [[ struct dirent *readdir ( DIR *dirp ); ]] )
+ffi.cdef ( [[ dirent *readdir ( DIR *dirp ); ]] )
 ffi.cdef ( [[ void rewinddir ( DIR *dirp ); ]] )
 
 local fail =

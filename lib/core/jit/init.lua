@@ -14,4 +14,4 @@ return ( function ( ... )
       required[i] = mod
   end
   return unpack ( required )
-end ) ( "ffi", "bit" )
+end ) ( "ffi", "jit", "bit" )
